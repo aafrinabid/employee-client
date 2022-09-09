@@ -72,12 +72,28 @@ const EmployeeSlice=createSlice({
           addEmployee(state){
             console.log('submitting')
             state.addEmployeeState=false
+            const   employee={
+                id:'',
+                name:'',
+                email:'',
+                mobile:'',
+                gender:'male',
+                status:'active',
+                image:''
+                
+            }
+            state.newEmployee=employee
+            
           },
           setEmployees(state,action){
             state.employees=[...action.payload]
           },
           listChanger(state){
             state.listChange=!state.listChange
+          },
+          deleteEmployee(state,action){
+            const updatedList=state.employees.filter(user=>user._id!==action.payload)
+            state.employees=[...updatedList]
           }
 
     }

@@ -13,6 +13,7 @@ import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import { Select } from "@material-ui/core";
 import {MenuItem} from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { employeeActions } from "../assets/store/employeeSlice";
 import axios from "axios";
@@ -87,6 +88,8 @@ function TableData() {
   const dispatch=useDispatch();
 
   const rows=useSelector(state=>state.employeeHandler.employees)
+  // const orderedRow=rows.sort((a,b)=>a.name<b.name?-1 :1)
+  // console.log(orderedRow)
   const listChange=useSelector(state=>state.employeeHandler.listChange)
   console.log(rows)
 
@@ -144,6 +147,20 @@ return {
 }
 
 
+const deleteEmployee=(id)=>{
+  console.log(id)
+axios.post('http://localhost:4000/deleteEmployee',{id:id}).then(res=>{
+  console.log(res.data)
+  if(res.data){
+
+    dispatch(employeeActions.deleteEmployee(id))
+  }
+}).catch(e=>{
+  console.log(e)
+})
+}
+
+
 
 
 
@@ -159,6 +176,8 @@ return {
             <TableCell align="left">Gender</TableCell>
             <TableCell align="left">Status</TableCell>
             <TableCell align="left">Image</TableCell>
+            <TableCell align="left" />
+
 
           </TableRow>
         </TableHead>
@@ -196,7 +215,15 @@ return {
               <CustomTableCell {...{ row, name: "gender", onChange }} />
               <CustomTableCell {...{ row, name: "status", onChange }} />
               <CustomTableCell {...{ row, name: "image", onChange }} />
-
+             {row.isEditMode?'':
+              <TableCell className={classes.selectTableCell}>
+              <IconButton
+                      aria-label="done"
+                      onClick={deleteEmployee.bind(null,row._id)}
+                    >
+                      <Delete />
+                      </IconButton>  
+              </TableCell>}
             </TableRow>
           ))}
         </TableBody>
