@@ -12,13 +12,14 @@ const EmployeeSlice=createSlice({
     initialState:{
         beforeEdit:{},
         employees:producers,
+        addEmployeeState:false,
         newEmployee:{
             id:'',
             name:'',
             email:'',
             mobile:'',
-            gender:'',
-            active:''
+            gender:'male',
+            status:'active',
             
         }
     },
@@ -57,11 +58,19 @@ const EmployeeSlice=createSlice({
             state.employees=updatedRows
           },
           onChangeNewEmployee(state,action){
-            const value = action.payload.e.target.value;
-            const name = action.payload.e.target.name;
+            const value = action.payload.value
+            const name = action.payload.name;
             console.log(value)
                 state.newEmployee={...state.newEmployee,[name]:value}
 
+          },
+          changeAddEmployeeState(state){
+            state.addEmployeeState=!state.addEmployeeState
+          },
+          addEmployee(state){
+            console.log('submitting')
+            state.employees=[...state.employees,state.newEmployee]
+            state.addEmployeeState=false
           }
 
     }

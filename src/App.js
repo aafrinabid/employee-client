@@ -4,16 +4,22 @@ import TableData from './components/Table';
 import { Button } from '@material-ui/core';
 import AddEmployee from './components/AddEmployee';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { employeeActions } from './assets/store/employeeSlice';
 
 function App() {
-  const [open,setOpen]=useState(false)
+const dispatch=useDispatch()
+const addEmployeeState=useSelector(state=>state.employeeHandler.addEmployeeState)
+const changeState=()=>{
+  dispatch(employeeActions.changeAddEmployeeState())
+}
   return (
     <div className="App">
     <TableData/>
     <div style={{paddingTop:'10px'}}>
-    <Button onClick={()=>setOpen(prev=>!prev)}> Add Employees </Button>
+    <Button onClick={changeState}> Add Employees </Button>
     </div>
-    {open &&<div>
+    {addEmployeeState&&<div>
       <AddEmployee />
     </div>}
     </div>
