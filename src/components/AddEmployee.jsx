@@ -39,20 +39,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-const CustomTableCell = ({ row, name, onChange }) => {
-  const [gender, setGender] = React.useState(row[name]);
-  const [status,setStatus] = React.useState(row[name]);
+const CustomTableCell = ({ isEditMode, name, onChange ,value}) => {
+  const [gender, setGender] = React.useState(value);
+  const [status,setStatus] = React.useState(value);
 
 
   const handleChange = (event) => {
     name==='gender'?setGender(event.target.value):setStatus(event.target.value);
     console.log(event.target.name)
-    onChange(event,row)
+    onChange(event)
     
   };
   const classes = useStyles();
-  const { isEditMode } = row;
   return (
     <TableCell align="left" className={classes.tableCell}>
       {isEditMode ? (
@@ -70,46 +68,32 @@ const CustomTableCell = ({ row, name, onChange }) => {
 }
       </Select>:
         <Input
-          value={row[name]}
+          value={value}
           name={name}
-          onChange={e => onChange(e, row)}
+          onChange={e => onChange(e)}
           className={classes.input}
         />
       ) : (
-        row[name]
+        // row[name]
+        value
       )}
     </TableCell>
   );
 };
 
-function TableData() {
+function AddEmployee() {
   const dispatch=useDispatch();
-
-  const rows=useSelector(state=>state.employeeHandler.employees)
-  const beforeEdit=useSelector(state=>state.employeeHandler.beforeEdit)
-  console.log(beforeEdit)
+  const newEmployeeData=useSelector(state=>state.employeeHandler.newEmployee)
 
   const classes = useStyles();
 
-  const onToggleEditMode = id => {
-dispatch(employeeActions.onToggleEditMode(id))
-
-
-
-  };
-
   const onChange = (e, row) => {
 
-    dispatch(employeeActions.onChange({e:e,row:row}))
+    dispatch(employeeActions.onChangeNewEmployee({e:e}))
 
   };
 
-const onRevert=id=>{
-  dispatch(employeeActions.onRevert(id))
-
-
-}
-
+  
 
 
 
@@ -128,40 +112,18 @@ const onRevert=id=>{
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.id}>
+          {/* {rows.map(row => ( */}
+            <TableRow >
               <TableCell className={classes.selectTableCell}>
-                {row.isEditMode ? (
-                  <>
-                    <IconButton
-                      aria-label="done"
-                      onClick={() => onToggleEditMode(row.id)}
-                    >
-                      <DoneIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="revert"
-                      onClick={() => onRevert(row.id)}
-                    >
-                      <RevertIcon />
-                    </IconButton>
-                  </>
-                ) : (
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => onToggleEditMode(row.id)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                )}
+               
               </TableCell>
-              <CustomTableCell {...{ row, name: "name", onChange }} />
-              <CustomTableCell {...{ row, name: "email", onChange }} />
-              <CustomTableCell {...{ row, name: "mobile", onChange }} />
-              <CustomTableCell {...{ row, name: "gender", onChange }} />
-              <CustomTableCell {...{ row, name: "status", onChange }} />
+              <CustomTableCell {...{ isEditMode:true, name: "name", onChange, value:newEmployeeData['name']}} />
+              <CustomTableCell {...{ isEditMode:true, name: "email", onChange, value:newEmployeeData['email']}} />
+              <CustomTableCell {...{ isEditMode:true, name: "mobile", onChange, value:newEmployeeData['mobile']}} />
+              <CustomTableCell {...{ isEditMode:true, name: "gender", onChange, value:newEmployeeData['gender']}} />
+              <CustomTableCell {...{ isEditMode:true, name: "status", onChange, value:newEmployeeData['status']}} />
             </TableRow>
-          ))}
+          {/* ))} */}
         </TableBody>
       </Table>
     </Paper>
@@ -169,4 +131,4 @@ const onRevert=id=>{
 }
 
 
-export default TableData
+export default AddEmployee

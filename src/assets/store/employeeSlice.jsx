@@ -1,16 +1,26 @@
+import { SatelliteSharp } from "@material-ui/icons";
 import { createSlice } from "@reduxjs/toolkit";
 
 const producers=[ 
     {id:1,name:"Ravi",email:'ravi@gmail.com',mobile:9895433434,gender:'male',status:'active',isEditMode:false},
-{id:2,name:"shabu",mail:'Shabu@gmail.com',mobile:9895363434,gender:'male',status:'active',isEditMode:false},
-{id:3,name:"safu",mail:'Shaf@gmail.com',mobile:9895363444,gender:'male',status:'active',isEditMode:false},
+{id:2,name:"shabu",email:'Shabu@gmail.com',mobile:9895363434,gender:'male',status:'active',isEditMode:false},
+{id:3,name:"safu",email:'Shaf@gmail.com',mobile:9895363444,gender:'male',status:'active',isEditMode:false},
 
 ]
 const EmployeeSlice=createSlice({
     name:'employee',
     initialState:{
         beforeEdit:{},
-        employees:producers
+        employees:producers,
+        newEmployee:{
+            id:'',
+            name:'',
+            email:'',
+            mobile:'',
+            gender:'',
+            active:''
+            
+        }
     },
     reducers:{
         onToggleEditMode (state,action){
@@ -39,11 +49,19 @@ const EmployeeSlice=createSlice({
             state.employees=newRows
           },
           onRevert(state,action){
+            console.log(action)
             const personIndex=state.employees.findIndex(user=>user.id===action.payload)
+            console.log(state.employees[personIndex])
             const updatedRows=state.employees
             updatedRows[personIndex]=state.beforeEdit
             state.employees=updatedRows
-          
+          },
+          onChangeNewEmployee(state,action){
+            const value = action.payload.e.target.value;
+            const name = action.payload.e.target.name;
+            console.log(value)
+                state.newEmployee={...state.newEmployee,[name]:value}
+
           }
 
     }
