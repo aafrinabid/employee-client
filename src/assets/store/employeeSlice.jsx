@@ -11,7 +11,7 @@ const EmployeeSlice=createSlice({
     name:'employee',
     initialState:{
         beforeEdit:{},
-        employees:producers,
+        employees:[],
         addEmployeeState:false,
         newEmployee:{
             id:'',
@@ -20,8 +20,10 @@ const EmployeeSlice=createSlice({
             mobile:'',
             gender:'male',
             status:'active',
+            image:''
             
-        }
+        },
+        listChange:false
     },
     reducers:{
         onToggleEditMode (state,action){
@@ -71,6 +73,9 @@ const EmployeeSlice=createSlice({
             console.log('submitting')
             state.employees=[...state.employees,state.newEmployee]
             state.addEmployeeState=false
+          },
+          setEmployees(state,action){
+            state.employees=[...action.payload]
           }
 
     }

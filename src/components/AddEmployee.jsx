@@ -108,6 +108,8 @@ function AddEmployee() {
             <TableCell align="left">Mobile</TableCell>
             <TableCell align="left">Gender</TableCell>
             <TableCell align="left">Status</TableCell>
+            <TableCell align="left">Image</TableCell>
+
             <TableCell align="left" />
 
           </TableRow>
@@ -121,6 +123,7 @@ function AddEmployee() {
               <CustomTableCell {...{ isEditMode:true, name: "mobile", onChange, value:newEmployeeData['mobile']}} />
               <CustomTableCell {...{ isEditMode:true, name: "gender", onChange, value:newEmployeeData['gender']}} />
               <CustomTableCell {...{ isEditMode:true, name: "status", onChange, value:newEmployeeData['status']}} />
+              <CustomTableCell {...{ isEditMode:true, name: "image", onChange, value:newEmployeeData['image']}} />
               <TableCell className={classes.selectTableCell}>
                <Button onClick={onSubmit} >Submit</Button>
               </TableCell>

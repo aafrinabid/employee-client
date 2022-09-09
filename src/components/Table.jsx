@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -15,6 +15,7 @@ import { Select } from "@material-ui/core";
 import {MenuItem} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { employeeActions } from "../assets/store/employeeSlice";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,7 +77,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
           className={classes.input}
         />
       ) : (
-        row[name]
+       name==='image'?<img src={row[name]} /> :row[name]
       )}
     </TableCell>
   );
@@ -90,6 +91,13 @@ function TableData() {
   console.log(beforeEdit)
 
   const classes = useStyles();
+  useEffect(()=>{
+    axios.post('http://localhost:4000/getEmployees').then(res=>{
+      console.log(res.data)
+      dispatch(employeeActions.setEmployees(res.data.result))
+    })
+
+  },[])
 
   const onToggleEditMode = id => {
 dispatch(employeeActions.onToggleEditMode(id))
@@ -125,6 +133,8 @@ const onRevert=id=>{
             <TableCell align="left">Mobile</TableCell>
             <TableCell align="left">Gender</TableCell>
             <TableCell align="left">Status</TableCell>
+            <TableCell align="left">Image</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -160,6 +170,8 @@ const onRevert=id=>{
               <CustomTableCell {...{ row, name: "mobile", onChange }} />
               <CustomTableCell {...{ row, name: "gender", onChange }} />
               <CustomTableCell {...{ row, name: "status", onChange }} />
+              <CustomTableCell {...{ row, name: "image", onChange }} />
+
             </TableRow>
           ))}
         </TableBody>
