@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,8 +13,10 @@ import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import { Select } from "@material-ui/core";
 import {MenuItem} from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { employeeActions } from "../assets/store/employeeSlice";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,20 +78,24 @@ const CustomTableCell = ({ row, name, onChange }) => {
           className={classes.input}
         />
       ) : (
-        row[name]
+       name==='image'?<img src={row[name]} style={{width:'50%',borderRadius:'49px'}} /> :row[name]
       )}
     </TableCell>
   );
 };
 
-function TableData() {
+function TableData({rows}) {
   const dispatch=useDispatch();
 
-  const rows=useSelector(state=>state.employeeHandler.employees)
+  // const orderedRow=rows.sort((a,b)=>a.name<b.name?-1 :1)
+  // console.log(orderedRow)
+  console.log(rows)
+
   const beforeEdit=useSelector(state=>state.employeeHandler.beforeEdit)
   console.log(beforeEdit)
 
   const classes = useStyles();
+  
 
   const onToggleEditMode = id => {
 dispatch(employeeActions.onToggleEditMode(id))
@@ -110,6 +116,42 @@ const onRevert=id=>{
 
 }
 
+const onEditEmployee= id=>{
+  console.log(id)
+  const requiredData=rows.filter(row=>row._id===id).map(user=>{
+return {
+  name:user.name,
+  email:user.email,
+  mobile:user.mobile,
+  gender:user.gender,
+  status:user.status,
+  image:user.image
+}
+  })
+  console.log(requiredData[0].name)
+  axios.post('http://localhost:4000/editEmployee',{data:requiredData[0],id}).then(res=>{
+
+    
+
+
+    dispatch(employeeActions.onToggleEditMode(id))
+  })
+}
+
+
+const deleteEmployee=(id)=>{
+  console.log(id)
+axios.post('http://localhost:4000/deleteEmployee',{id:id}).then(res=>{
+  console.log(res.data)
+  if(res.data){
+
+    dispatch(employeeActions.deleteEmployee(id))
+  }
+}).catch(e=>{
+  console.log(e)
+})
+}
+
 
 
 
@@ -125,23 +167,27 @@ const onRevert=id=>{
             <TableCell align="left">Mobile</TableCell>
             <TableCell align="left">Gender</TableCell>
             <TableCell align="left">Status</TableCell>
+            <TableCell align="left">Image</TableCell>
+            <TableCell align="left" />
+
+
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.id}>
+            <TableRow key={row._id}>
               <TableCell className={classes.selectTableCell}>
                 {row.isEditMode ? (
                   <>
                     <IconButton
                       aria-label="done"
-                      onClick={() => onToggleEditMode(row.id)}
+                      onClick={onEditEmployee.bind(null,row._id)}
                     >
                       <DoneIcon />
                     </IconButton>
                     <IconButton
                       aria-label="revert"
-                      onClick={() => onRevert(row.id)}
+                      onClick={() => onRevert(row._id)}
                     >
                       <RevertIcon />
                     </IconButton>
@@ -149,7 +195,7 @@ const onRevert=id=>{
                 ) : (
                   <IconButton
                     aria-label="delete"
-                    onClick={() => onToggleEditMode(row.id)}
+                    onClick={() => onToggleEditMode(row._id)}
                   >
                     <EditIcon />
                   </IconButton>
@@ -160,6 +206,16 @@ const onRevert=id=>{
               <CustomTableCell {...{ row, name: "mobile", onChange }} />
               <CustomTableCell {...{ row, name: "gender", onChange }} />
               <CustomTableCell {...{ row, name: "status", onChange }} />
+              <CustomTableCell {...{ row, name: "image", onChange }} />
+             {row.isEditMode?'':
+              <TableCell className={classes.selectTableCell}>
+              <IconButton
+                      aria-label="done"
+                      onClick={deleteEmployee.bind(null,row._id)}
+                    >
+                      <Delete />
+                      </IconButton>  
+              </TableCell>}
             </TableRow>
           ))}
         </TableBody>
