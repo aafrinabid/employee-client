@@ -84,26 +84,18 @@ const CustomTableCell = ({ row, name, onChange }) => {
   );
 };
 
-function TableData() {
+function TableData({rows}) {
   const dispatch=useDispatch();
 
-  const rows=useSelector(state=>state.employeeHandler.employees)
   // const orderedRow=rows.sort((a,b)=>a.name<b.name?-1 :1)
   // console.log(orderedRow)
-  const listChange=useSelector(state=>state.employeeHandler.listChange)
   console.log(rows)
 
   const beforeEdit=useSelector(state=>state.employeeHandler.beforeEdit)
   console.log(beforeEdit)
 
   const classes = useStyles();
-  useEffect(()=>{
-    axios.post('http://localhost:4000/getEmployees').then(res=>{
-      console.log(res.data)
-      dispatch(employeeActions.setEmployees(res.data.result))
-    })
-
-  },[listChange])
+  
 
   const onToggleEditMode = id => {
 dispatch(employeeActions.onToggleEditMode(id))

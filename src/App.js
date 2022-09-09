@@ -1,21 +1,54 @@
 import logo from './logo.svg';
 import './App.css';
 import TableData from './components/Table';
-import { Button } from '@material-ui/core';
+import { Button, TablePagination } from '@material-ui/core';
 import AddEmployee from './components/AddEmployee';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { employeeActions } from './assets/store/employeeSlice';
+import axios from 'axios';
+import Pagination from './components/Paginate';
 
 function App() {
 const dispatch=useDispatch()
+const [currentPage,setCurrentPage]=useState(1)
+const [postsPerPage]=useState(5)
+const rows=useSelector(state=>state.employeeHandler.employees)
+const listChange=useSelector(state=>state.employeeHandler.listChange)
 const addEmployeeState=useSelector(state=>state.employeeHandler.addEmployeeState)
 const changeState=()=>{
   dispatch(employeeActions.changeAddEmployeeState())
 }
-  return (
+useEffect(()=>{
+  axios.post('http://localhost:4000/getEmployees').then(res=>{
+    console.log(res.data)
+    dispatch(employeeActions.setEmployees(res.data.result))
+  })
+
+ 
+
+
+},[listChange])
+
+const indexOfLastPost=currentPage* postsPerPage
+const indexOfFirstPost=indexOfLastPost- postsPerPage
+const currentPosts = rows.slice(indexOfFirstPost, indexOfLastPost);
+const paginate = pageNumber => setCurrentPage(pageNumber);
+
+return (
     <div className="App">
-    <TableData/>
+    <div>
+    <TableData rows={currentPosts}/>
+    </div>
+    <div>
+    <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={rows.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
+
+    </div>
     <div style={{paddingTop:'10px'}}>
     <Button onClick={changeState}> Add Employees </Button>
     </div>

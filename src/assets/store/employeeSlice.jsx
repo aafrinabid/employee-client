@@ -1,12 +1,7 @@
 import { SatelliteSharp } from "@material-ui/icons";
 import { createSlice } from "@reduxjs/toolkit";
 
-const producers=[ 
-    {id:1,name:"Ravi",email:'ravi@gmail.com',mobile:9895433434,gender:'male',status:'active',isEditMode:false},
-{id:2,name:"shabu",email:'Shabu@gmail.com',mobile:9895363434,gender:'male',status:'active',isEditMode:false},
-{id:3,name:"safu",email:'Shaf@gmail.com',mobile:9895363444,gender:'male',status:'active',isEditMode:false},
 
-]
 const EmployeeSlice=createSlice({
     name:'employee',
     initialState:{
