@@ -11,6 +11,7 @@ import { Button, Select } from "@material-ui/core";
 import {MenuItem} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { employeeActions } from "../assets/store/employeeSlice";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,7 +91,15 @@ function AddEmployee() {
   };
   const onSubmit=()=>{
     console.log('submitting')
-    dispatch(employeeActions.addEmployee())
+    axios.post('http://localhost:4000/addEmployee',newEmployeeData).then(res=>{
+         if(res.data.success){
+
+             dispatch(employeeActions.addEmployee())
+             dispatch(employeeActions.listChanger())
+         }
+    }).catch(e=>{
+        console.log(e)
+    })
   }
 
   

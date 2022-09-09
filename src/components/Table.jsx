@@ -77,7 +77,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
           className={classes.input}
         />
       ) : (
-       name==='image'?<img src={row[name]} /> :row[name]
+       name==='image'?<img src={row[name]} style={{width:'50%',borderRadius:'49px'}} /> :row[name]
       )}
     </TableCell>
   );
@@ -87,6 +87,8 @@ function TableData() {
   const dispatch=useDispatch();
 
   const rows=useSelector(state=>state.employeeHandler.employees)
+  const listChange=useSelector(state=>state.employeeHandler.listChange)
+
   const beforeEdit=useSelector(state=>state.employeeHandler.beforeEdit)
   console.log(beforeEdit)
 
@@ -97,7 +99,7 @@ function TableData() {
       dispatch(employeeActions.setEmployees(res.data.result))
     })
 
-  },[])
+  },[listChange])
 
   const onToggleEditMode = id => {
 dispatch(employeeActions.onToggleEditMode(id))

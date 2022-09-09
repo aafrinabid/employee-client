@@ -71,11 +71,13 @@ const EmployeeSlice=createSlice({
           },
           addEmployee(state){
             console.log('submitting')
-            state.employees=[...state.employees,state.newEmployee]
             state.addEmployeeState=false
           },
           setEmployees(state,action){
             state.employees=[...action.payload]
+          },
+          listChanger(state){
+            state.listChange=!state.listChange
           }
 
     }
