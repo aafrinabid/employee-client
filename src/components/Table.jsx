@@ -129,7 +129,7 @@ return {
 }
   })
   console.log(requiredData[0].name)
-  axios.post('http://localhost:4000/editEmployee',{data:requiredData[0],id}).then(res=>{
+  axios.post('https://employeelistupdate.herokuapp.com//editEmployee',{data:requiredData[0],id}).then(res=>{
 
     
 
@@ -141,7 +141,7 @@ return {
 
 const deleteEmployee=(id)=>{
   console.log(id)
-axios.post('http://localhost:4000/deleteEmployee',{id:id}).then(res=>{
+axios.post('https://employeelistupdate.herokuapp.com//deleteEmployee',{id:id}).then(res=>{
   console.log(res.data)
   if(res.data){
 

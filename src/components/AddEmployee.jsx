@@ -91,7 +91,7 @@ function AddEmployee() {
   };
   const onSubmit=()=>{
     console.log('submitting')
-    axios.post('http://localhost:4000/addEmployee',newEmployeeData).then(res=>{
+    axios.post('https://employeelistupdate.herokuapp.com/addEmployee',newEmployeeData).then(res=>{
          if(res.data.success){
 
              dispatch(employeeActions.addEmployee())

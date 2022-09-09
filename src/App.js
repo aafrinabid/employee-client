@@ -20,7 +20,7 @@ const changeState=()=>{
   dispatch(employeeActions.changeAddEmployeeState())
 }
 useEffect(()=>{
-  axios.post('http://localhost:4000/getEmployees').then(res=>{
+  axios.post('https://employeelistupdate.herokuapp.com/getEmployees').then(res=>{
     console.log(res.data)
     dispatch(employeeActions.setEmployees(res.data.result))
   })
