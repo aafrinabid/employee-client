@@ -88,6 +88,7 @@ function TableData() {
 
   const rows=useSelector(state=>state.employeeHandler.employees)
   const listChange=useSelector(state=>state.employeeHandler.listChange)
+  console.log(rows)
 
   const beforeEdit=useSelector(state=>state.employeeHandler.beforeEdit)
   console.log(beforeEdit)
@@ -120,6 +121,28 @@ const onRevert=id=>{
 
 }
 
+const onEditEmployee= id=>{
+  console.log(id)
+  const requiredData=rows.filter(row=>row._id===id).map(user=>{
+return {
+  name:user.name,
+  email:user.email,
+  mobile:user.mobile,
+  gender:user.gender,
+  status:user.status,
+  image:user.image
+}
+  })
+  console.log(requiredData[0].name)
+  axios.post('http://localhost:4000/editEmployee',{data:requiredData[0],id}).then(res=>{
+
+    
+
+
+    dispatch(employeeActions.onToggleEditMode(id))
+  })
+}
+
 
 
 
@@ -141,19 +164,19 @@ const onRevert=id=>{
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.id}>
+            <TableRow key={row._id}>
               <TableCell className={classes.selectTableCell}>
                 {row.isEditMode ? (
                   <>
                     <IconButton
                       aria-label="done"
-                      onClick={() => onToggleEditMode(row.id)}
+                      onClick={onEditEmployee.bind(null,row._id)}
                     >
                       <DoneIcon />
                     </IconButton>
                     <IconButton
                       aria-label="revert"
-                      onClick={() => onRevert(row.id)}
+                      onClick={() => onRevert(row._id)}
                     >
                       <RevertIcon />
                     </IconButton>
@@ -161,7 +184,7 @@ const onRevert=id=>{
                 ) : (
                   <IconButton
                     aria-label="delete"
-                    onClick={() => onToggleEditMode(row.id)}
+                    onClick={() => onToggleEditMode(row._id)}
                   >
                     <EditIcon />
                   </IconButton>

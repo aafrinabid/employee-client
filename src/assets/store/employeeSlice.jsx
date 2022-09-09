@@ -28,7 +28,7 @@ const EmployeeSlice=createSlice({
     reducers:{
         onToggleEditMode (state,action){
            state.employees=state.employees.map(row=>{
-               if (row.id ===action.payload) {
+               if (row._id ===action.payload) {
                 state.beforeEdit={...row}
               return { ...row, isEditMode: !row.isEditMode };
             }else{
@@ -41,9 +41,9 @@ const EmployeeSlice=createSlice({
  
             const value = action.payload.e.target.value;
             const name = action.payload.e.target.name;
-            const { id } = action.payload.row;
+            const { _id } = action.payload.row;
             const newRows = state.employees.map(row => {
-              if (row.id === id) {
+              if (row._id === _id) {
                 return { ...row, [name]: value };
         
               }
@@ -53,7 +53,7 @@ const EmployeeSlice=createSlice({
           },
           onRevert(state,action){
             console.log(action)
-            const personIndex=state.employees.findIndex(user=>user.id===action.payload)
+            const personIndex=state.employees.findIndex(user=>user._id===action.payload)
             console.log(state.employees[personIndex])
             const updatedRows=state.employees
             updatedRows[personIndex]=state.beforeEdit
