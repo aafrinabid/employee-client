@@ -61,7 +61,7 @@ return (
     <div style={{paddingTop:'10px'}}>
     <Button onClick={changeState}> Add Employees </Button>
     </div>
-    {addEmployeeState&&<div>
+    {addEmployeeState&&<div style={{padding:'10px 0px'}}>
       <AddEmployee />
     </div>}
     </div>
