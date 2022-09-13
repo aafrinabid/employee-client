@@ -14,7 +14,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate ,currentPage}) => {
     gap:' 94px'
 }}>
         {pageNumbers.map(number => (
-          <li key={number} onClick={() => paginate(number)}   style={{display:'block',fontSize:number===currentPage?'50px':'20px'}}>
+          <li key={number} onClick={() => paginate(number)}   style={{display:'block',fontSize:number===currentPage?'50px':'20px',cursor:'pointer'}}>
               {number}
           </li>
         ))}
