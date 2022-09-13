@@ -11,6 +11,7 @@ import Pagination from './components/Paginate';
 
 function App() {
 const dispatch=useDispatch()
+const [isLoading,setIsLoading]=useState(false)
 const [currentPage,setCurrentPage]=useState(1)
 const [postsPerPage]=useState(5)
 const rows=useSelector(state=>state.employeeHandler.employees)
@@ -20,9 +21,13 @@ const changeState=()=>{
   dispatch(employeeActions.changeAddEmployeeState())
 }
 useEffect(()=>{
+  setIsLoading(true)
   axios.post('https://employeelistupdate.herokuapp.com/getEmployees').then(res=>{
     console.log(res.data)
     dispatch(employeeActions.setEmployees(res.data.result))
+    setIsLoading(false)
+  }).catch(e=>{
+    setIsLoading(false)
   })
 
  
@@ -37,9 +42,13 @@ const paginate = pageNumber => setCurrentPage(pageNumber);
 
 return (
     <div className="App">
+    {isLoading?
     <div>
+      <h1>LOADING.....</h1>
+      </div>:
+      <div>
     <TableData rows={currentPosts}/>
-    </div>
+    </div>}
     <div>
     <Pagination
         postsPerPage={postsPerPage}
